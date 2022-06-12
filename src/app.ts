@@ -1,23 +1,23 @@
-import 'reflect-metadata';
-import express, { Application, Router } from 'express';
+import express, { Application, NextFunction, Request, Response, Router } from 'express';
 import { join } from 'path';
-import { MetadataKey } from './constants/enums';
-import { IApp, IController, IRouter } from './abstractions/interfaces';
+import { IApp, IController, IControllerService, IHandler } from './abstractions/interfaces';
 import {
   AppConfiguration,
-  ErrorHandlerFunc,
+  ErrorHandler,
   HandlerInfo,
   LaunchCallback,
+  Middleware,
 } from './abstractions/types';
-import { ControllerClass } from './abstractions/classes';
-import { defaultErrorMiddleware, defaultLaunchCallback } from './constants/defaults';
+import { ControllerClass } from './abstractions/factories';
+import { defaultErrorHandler, defaultLaunchCallback } from './constants/defaults';
+import { ControllerService, PathService } from './services';
 
 export class App implements IApp {
   private readonly instance: Application = express();
   private readonly handlerInfo: HandlerInfo[] = [];
 
   private port: number | string = 5000;
-  private errorHandler: ErrorHandlerFunc = defaultErrorMiddleware;
+  private errorHandler: ErrorHandler = defaultErrorHandler;
 
   constructor(config: AppConfiguration = {}) {
     this.parseConfig(config);
@@ -41,21 +41,43 @@ export class App implements IApp {
     if (errorHandler) {
       this.errorHandler = errorHandler;
     }
+
+    this.instance.use(this.errorHandler);
   }
 
   private registerRouters(controllers: ControllerClass[], isShowInfo: boolean) {
     controllers.forEach((controllerClass: ControllerClass) => {
       const controllerInstance: IController = new controllerClass();
-      const basePath: string = Reflect.getMetadata(MetadataKey.BASE_PATH, controllerClass);
-      const routers: IRouter[] = Reflect.getMetadata(MetadataKey.ROUTERS, controllerClass);
+      const controllerService: IControllerService = new ControllerService(controllerInstance);
+
+      const basePath: string = controllerService.basePath;
       const router = Router();
 
-      routers.forEach(({ method, path, handlerName }) => {
-        router[method](path, controllerInstance[String(handlerName)].bind(controllerInstance));
+      controllerService.handlers.forEach((handler: IHandler) => {
+        if (!handler.method || !handler.path || !handler.name) return;
+
+        const originalHandler = controllerInstance[String(handler.name)];
+        const middlewares: Middleware[] = handler.middlewares || [];
+
+        const finalHandler = async function (req: Request, res: Response, next: NextFunction) {
+          try {
+            originalHandler.call(controllerInstance, req, res, next);
+          } catch (error) {
+            if (!handler.errorHandler) {
+              next(error);
+            } else {
+              handler.errorHandler(error as Error, req, res, next);
+            }
+          }
+        };
+
+        router[handler.method](handler.path, ...middlewares, finalHandler);
+
+        const path: string = new PathService(join(basePath, handler.path)).format();
 
         this.handlerInfo.push({
-          endpoint: `${method.toLocaleUpperCase()} ${join(basePath, path)}`,
-          handler: `${controllerClass.name}.${String(handlerName)}`,
+          endpoint: `${handler.method.toLocaleUpperCase()} ${path}`,
+          handler: `${controllerClass.name}.${String(handler.name)}`,
         });
       });
 

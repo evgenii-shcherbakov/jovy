@@ -1,30 +1,22 @@
 import 'reflect-metadata';
-import { IRouter } from '../abstractions/interfaces';
 import { MetadataKey, HttpMethod } from '../constants/enums';
-import { formatPath } from './helpers';
+import { ErrorHandler } from '../abstractions/types';
+import { ControllerService, PathService } from '../services';
 
 export const Controller = (basePath: string = ''): ClassDecorator => {
   return (target) => {
-    Reflect.defineMetadata(MetadataKey.BASE_PATH, formatPath(basePath), target);
+    Reflect.defineMetadata(MetadataKey.BASE_PATH, new PathService(basePath).format(), target);
   };
 };
 
 const methodDecoratorFactory = (method: HttpMethod) => {
   return (path: string = ''): MethodDecorator => {
     return (target: Object, propertyKey: string | symbol) => {
-      const controllerClass: Function = target.constructor;
-
-      const routers: IRouter[] = Reflect.hasMetadata(MetadataKey.ROUTERS, controllerClass)
-        ? Reflect.getMetadata(MetadataKey.ROUTERS, controllerClass)
-        : [];
-
-      routers.push({
+      new ControllerService(target).updateHandlers({
         method,
-        path: formatPath(path),
-        handlerName: propertyKey,
+        path: new PathService(path).format(),
+        name: propertyKey,
       });
-
-      Reflect.defineMetadata(MetadataKey.ROUTERS, routers, controllerClass);
     };
   };
 };
@@ -34,3 +26,9 @@ export const Post = methodDecoratorFactory(HttpMethod.POST);
 export const Put = methodDecoratorFactory(HttpMethod.PUT);
 export const Patch = methodDecoratorFactory(HttpMethod.PATCH);
 export const Delete = methodDecoratorFactory(HttpMethod.DELETE);
+
+export const CustomError = (errorHandler: ErrorHandler): MethodDecorator => {
+  return (target: Object, propertyKey: string | symbol) => {
+    new ControllerService(target).updateHandlers({ name: String(propertyKey), errorHandler });
+  };
+};

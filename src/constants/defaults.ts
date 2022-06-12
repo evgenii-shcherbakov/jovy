@@ -1,12 +1,12 @@
 import { Application, NextFunction, Request, Response } from 'express';
 
-export const defaultErrorMiddleware = (
+export const defaultErrorHandler = (
   err: Error,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  return res.status(500).json({ message: 'unknown error' });
+  res.status(500).json({ message: 'unknown error' });
 };
 
 export const defaultLaunchCallback = (app: Application, port: number | string) => {

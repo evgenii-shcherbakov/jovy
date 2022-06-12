@@ -1,24 +1,26 @@
-import { IApp, IRouter, IController } from './abstractions/interfaces';
+import { IApp, IHandler, IController } from './abstractions/interfaces';
 import {
+  Middleware,
   HandlerInfo,
-  ErrorHandlerFunc,
+  ErrorHandler,
   ConfigureAppFunc,
   AppConfiguration,
   LaunchCallback,
 } from './abstractions/types';
-import { BaseController } from './core/base.controller';
-import { ControllerClass } from './abstractions/classes';
+import { ControllerClass } from './abstractions/factories';
 import { HttpMethod } from './constants/enums';
-import { Get, Post, Put, Patch, Delete, Controller } from './shared/decorators';
+import { Get, Post, Put, Patch, Delete, Controller, CustomError } from './shared/decorators';
 import { App } from './app';
+import { setMiddlewares } from './shared/exports';
+import { BaseController } from './abstractions/classes';
 
 export {
   IApp,
   IController,
-  IRouter,
+  IHandler,
   App,
   ConfigureAppFunc,
-  ErrorHandlerFunc,
+  ErrorHandler,
   HandlerInfo,
   LaunchCallback,
   Get,
@@ -31,4 +33,7 @@ export {
   BaseController,
   HttpMethod,
   ControllerClass,
+  Middleware,
+  setMiddlewares,
+  CustomError,
 };

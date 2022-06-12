@@ -1,6 +1,6 @@
 export enum MetadataKey {
   BASE_PATH = 'base-path',
-  ROUTERS = 'routers',
+  HANDLERS = 'handlers',
 }
 
 export enum HttpMethod {

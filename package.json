@@ -1,12 +1,13 @@
 {
   "name": "jovy",
   "version": "1.0.2",
-  "description": "Jovy framework (Evgenii Shcherbakov's modified express version)",
+  "description": "Jovy framework (modified by Evgenii Shcherbakov express version)",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "tsc",
+    "format": "prettier --write src",
+    "build": "rm -rf dist && tsc",
     "mount": "npm run build && npm link",
-    "pub": "npm run build && npm version patch && npm publish"
+    "pub": "npm run format && npm run build && npm version patch && npm publish"
   },
   "keywords": [],
   "author": "Evgenii Scherbakov <iipekolict@gmail.com>",
