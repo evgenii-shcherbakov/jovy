@@ -1,5 +1,6 @@
+import 'reflect-metadata';
 import express, { Application, Router } from 'express';
-import * as http from 'http';
+import { join } from 'path';
 import { MetadataKey } from './constants/enums';
 import { IApp, IController, IRouter } from './abstractions/interfaces';
 import {
@@ -9,7 +10,7 @@ import {
   LaunchCallback,
 } from './abstractions/types';
 import { ControllerClass } from './abstractions/classes';
-import { defaultErrorMiddleware, defaultLaunchCallback } from './constants/common';
+import { defaultErrorMiddleware, defaultLaunchCallback } from './constants/defaults';
 
 export class App implements IApp {
   private readonly instance: Application = express();
@@ -43,7 +44,7 @@ export class App implements IApp {
   }
 
   private registerRouters(controllers: ControllerClass[], isShowInfo: boolean) {
-    controllers.forEach((controllerClass) => {
+    controllers.forEach((controllerClass: ControllerClass) => {
       const controllerInstance: IController = new controllerClass();
       const basePath: string = Reflect.getMetadata(MetadataKey.BASE_PATH, controllerClass);
       const routers: IRouter[] = Reflect.getMetadata(MetadataKey.ROUTERS, controllerClass);
@@ -53,7 +54,7 @@ export class App implements IApp {
         router[method](path, controllerInstance[String(handlerName)].bind(controllerInstance));
 
         this.handlerInfo.push({
-          api: `${method.toLocaleUpperCase()} ${basePath + path}`,
+          endpoint: `${method.toLocaleUpperCase()} ${join(basePath, path)}`,
           handler: `${controllerClass.name}.${String(handlerName)}`,
         });
       });
@@ -76,11 +77,10 @@ export class App implements IApp {
 
   async launch(launchCallback: LaunchCallback = defaultLaunchCallback): Promise<void> {
     try {
-      const server: http.Server = http.createServer(this.instance);
-
-      await launchCallback(server, this.port);
+      await launchCallback(this.instance, this.port);
     } catch (error) {
       console.error(`Server error: ${error}`);
+      process.exit();
     }
   }
 }

@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import { IRouter } from '../abstractions/interfaces';
 import { MetadataKey, HttpMethod } from '../constants/enums';
+import { formatPath } from './helpers';
 
 export const Controller = (basePath: string = ''): ClassDecorator => {
   return (target) => {
-    Reflect.defineMetadata(MetadataKey.BASE_PATH, `/${basePath}`, target);
+    Reflect.defineMetadata(MetadataKey.BASE_PATH, formatPath(basePath), target);
   };
 };
 
@@ -19,7 +20,7 @@ const methodDecoratorFactory = (method: HttpMethod) => {
 
       routers.push({
         method,
-        path,
+        path: formatPath(path),
         handlerName: propertyKey,
       });
 

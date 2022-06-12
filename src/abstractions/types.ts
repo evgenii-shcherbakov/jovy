@@ -1,9 +1,8 @@
 import { Application, NextFunction, Request, Response } from 'express';
 import { ControllerClass } from './classes';
-import http from 'http';
 
 export type HandlerInfo = {
-  api: string;
+  endpoint: string;
   handler: string;
 };
 
@@ -16,7 +15,7 @@ export type ErrorHandlerFunc = (
   next: NextFunction
 ) => void;
 
-export type LaunchCallback = (server: http.Server, port: string | number) => Promise<void>;
+export type LaunchCallback = (app: Application, port: string | number) => Promise<void> | void;
 
 export type AppConfiguration = {
   port?: number | string;
