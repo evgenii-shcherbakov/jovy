@@ -1,29 +1,26 @@
-name: Publish Jovy to npm.js
+name: Pull request into Jovy main branch
 
 on:
-  push:
+  pull_request:
     branches: [main]
 
 jobs:
-  Publish:
+  Check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
-      - name: Install NodeJS modules
+      - name: Install modules
         run: npm install
       - name: Setup git username
         run: git config user.name ${{ secrets.GIT_USERNAME }}
       - name: Setup git email
         run: git config user.email ${{ secrets.GIT_EMAIL }}
-      - name: Setup .npmrc file
-        run: npm ci
-      - name: Publishing
-        run: npm run pub
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-      - name: Update github repo
+      - name: Format code
+        run: npm run format
+      - name: Build
+        run: npm run build
+      - name: Update repo
         run: git push
