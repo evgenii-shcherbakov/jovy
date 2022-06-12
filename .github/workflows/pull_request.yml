@@ -1,4 +1,4 @@
-name: Pull request into Jovy main branch
+name: Pull request
 
 on:
   pull_request:
