@@ -11,11 +11,15 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      - name: install modules
+      - name: Install NodeJS modules
         run: npm install
-      - name: setup .npmrc file
+      - name: Setup git username
+        run: git config user.name $GIT_USERNAME
+      - name: Setup git email
+        run: git config user.email $GIT_EMAIL
+      - name: Setup .npmrc file
         run: npm ci
-      - name: publishing
+      - name: Publishing
         run: npm run pub
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
