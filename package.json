@@ -1,6 +1,6 @@
 {
   "name": "jovy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Jovy framework (iipekolict's modified express version)",
   "main": "./dist/index.js",
   "scripts": {
