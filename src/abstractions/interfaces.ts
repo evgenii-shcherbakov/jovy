@@ -3,15 +3,15 @@ import { Application, Handler } from 'express';
 import { ErrorHandler, HandlerInfo, LaunchCallback, Middleware } from './types';
 
 export interface IHandler {
+  name: string | symbol;
   method?: HttpMethod;
   path?: string;
-  name?: string | symbol;
   middlewares?: Middleware[];
   errorHandler?: ErrorHandler;
 }
 
 export interface IController {
-  [handleName: string]: Handler;
+  [handlerName: string]: Handler;
 }
 
 export interface IApp {

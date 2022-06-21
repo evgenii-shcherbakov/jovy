@@ -1,4 +1,2 @@
-import { ControllerService } from './controller.service';
-import { PathService } from './path.service';
-
-export { ControllerService, PathService };
+export { ControllerService } from './controller.service';
+export { PathService } from './path.service';

@@ -54,7 +54,7 @@ export class App implements IApp {
       const router = Router();
 
       controllerService.handlers.forEach((handler: IHandler) => {
-        if (!handler.method || !handler.path || !handler.name) return;
+        if (!handler.method || !handler.path) return;
 
         const originalHandler = controllerInstance[String(handler.name)];
         const middlewares: Middleware[] = handler.middlewares || [];
@@ -76,8 +76,8 @@ export class App implements IApp {
         const path: string = new PathService(join(basePath, handler.path)).format();
 
         this.handlerInfo.push({
-          endpoint: `${handler.method.toLocaleUpperCase()} ${path}`,
-          handler: `${controllerClass.name}.${String(handler.name)}`,
+          endpoint: `${handler.method.toLocaleUpperCase()} ${path || '/'}`,
+          handler: `${controllerInstance.toString()}.${String(handler.name)}`,
         });
       });
 
