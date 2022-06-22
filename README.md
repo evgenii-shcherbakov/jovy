@@ -3,20 +3,29 @@
 Main express modification with decorators support
 
 ```typescript
-import { Request, Response } from 'express';
-import { App, AppConfiguration, BaseController, Controller, Get } from 'jovy';
+import { Controller, Get, Param, HandlerType } from 'jovy';
 
 @Controller()
-class HelloController extends BaseController {
+class MainController {
   @Get()
-  getHello(_: Request, res: Response) {
-    res.json('Hello jovy');
+  getHello(): string {
+    return 'Hello';
+  }
+
+  @Get(':id/posts/:postId', HandlerType.RENDER)
+  getId(@Param('id') id: string, @Param('postId') postId: string): string {
+    return `
+      <div>
+        <h2>Id: ${id}</h2>
+        <p>PostId: ${postId}</p>
+      </div>
+    `;
   }
 }
 
 const config: AppConfiguration = {
   port: 3000,
-  controllers: [HelloController],
+  controllers: [MainController],
 };
 
 new App(config).launch();
@@ -36,40 +45,18 @@ the [`npm init` command](https://docs.npmjs.com/creating-a-package-json-file).
 Installation is done using the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
-```console
-$ npm install jovy express
+```shell
+npm install jovy
 ```
 
-If you use typescript, add also express types:
+If needed, you can also add express deps:
 
-```console
-$ npm install -D @types/express
+```shell
+npm install express
+npm install -D @types/express
 ```
 
 # Documentation
-
-## Routing
-Example of using routes:
-
-```typescript
-import { Request, Response } from 'express';
-import { BaseController, Controller, Get } from 'jovy';
-
-// create controller as on example below:
-@Controller('sample') // there path, if needed ("sample" in this case)
-export default class SampleController extends BaseController {
-  @Get() // decorator for set http method, can also take a path parameter
-  getHello(req: Request, res: Response) {
-    // functions like in express
-    res.json('Hello jovy');
-  }
-
-  @Get('middleware/:id') // of course, stock syntax from express fully supported
-  getMiddleware(req: Request, res: Response) {
-    res.json(req.params.id);
-  }
-}
-```
 
 ## Middlewares
 Example of using middlewares:
@@ -78,11 +65,12 @@ Example of using middlewares:
 import {
   setMiddlewares,
   Middleware,
-  BaseController,
   Controller,
   Get,
+  Request, 
+  Response, 
+  NextFunction,
 } from 'jovy';
-import { Request, Response, NextFunction } from 'express';
 
 // create you middleware, like in express
 export const authMiddleware: Middleware = async (
@@ -98,11 +86,11 @@ export const Auth = (): MethodDecorator => setMiddlewares(authMiddleware);
 
 // add decorator to needed functions in controllers
 @Controller()
-export default class MiddlewareController extends BaseController {
+export default class MiddlewareController {
   @Get('middleware')
   @Auth() // our decorator!
-  getMiddleware(req: Request, res: Response) {
-    res.json({ message: 'middleware' });
+  getMiddleware() {
+    return { message: 'middleware' };
   }
 }
 ```
@@ -111,15 +99,16 @@ export default class MiddlewareController extends BaseController {
 Example of using error handling:
 
 ```typescript
-import { NextFunction, Request, Response } from 'express';
 import {
   App,
   AppConfiguration,
-  BaseController,
   Controller,
   CustomError,
   ErrorHandler,
   Get,
+  NextFunction, 
+  Request, 
+  Response,
 } from 'jovy';
 
 // local error handler, can be used with CustomError decorator for only selected functions
@@ -143,15 +132,15 @@ const customGlobalErrorHandler: ErrorHandler = async (
 };
 
 @Controller('error')
-export default class ErrorController extends BaseController {
+export default class ErrorController {
   @Get()
-  getError(req: Request, res: Response, next: NextFunction) {
+  getError() {
     throw new Error(); // triggers global handler
   }
 
   @Get('custom')
   @CustomError(customError) // decorator for adding local error handlers
-  getCustomError(req: Request, res: Response, next: NextFunction) {
+  getCustomError() {
     throw new Error(); // triggers local handler
   }
 }
@@ -169,12 +158,11 @@ new App(config).launch();
 Examples of launch callback customizations:
 
 ```typescript
-import { Application } from 'express';
-import { App } from 'jovy';
+import { App, Application } from 'jovy';
 
 // sync example
 new App().launch((app: Application, port: string | number) => {
-  console.log(port);
+  app.listen(port, () => console.log(port));
 });
 
 // async example
@@ -182,7 +170,8 @@ new App().launch(async (app: Application, port: string | number) => {
   const delayedPort: string | number = await new Promise((res) =>
     setTimeout(() => res(port), 1000)
   );
-  console.log(delayedPort);
+  
+  app.listen(port, () => console.log(delayedPort));
 });
 ```
 
