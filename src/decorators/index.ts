@@ -1,3 +1,3 @@
-export { Controller } from './controller';
-export { CustomError } from './custom-error';
-export { Get, Post, Put, Patch, Delete } from './http-method';
+export { Controller } from './class';
+export { Get, Post, Put, Patch, Delete, CustomError, Classic, Render } from './method';
+export { Param, Header, Body, Query, Req, Res, Next } from './parameter';

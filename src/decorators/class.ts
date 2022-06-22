@@ -8,7 +8,7 @@ import { Handler } from 'express';
 export const Controller = (basePath: string = '') => {
   return function <T extends new (...args: any[]) => any>(Constructor: T) {
     const MixinClass: ControllerClass = class extends Constructor implements IController {
-      [handlerName: string]: Handler;
+      [handlerName: string]: Handler | Function;
 
       toString(): string {
         return Constructor.name;

@@ -1,4 +1,4 @@
-import express, { Application, NextFunction, Request, Response, Router } from 'express';
+import express, { Application, Handler, Router } from 'express';
 import { join } from 'path';
 import { IApp, IController, IControllerService, IHandler } from './abstractions/interfaces';
 import {
@@ -10,7 +10,7 @@ import {
 } from './abstractions/types';
 import { ControllerClass } from './abstractions/factories';
 import { defaultErrorHandler, defaultLaunchCallback } from './constants/defaults';
-import { ControllerService, PathService } from './services';
+import { ControllerService, HandlerService, PathService } from './services';
 
 export class App implements IApp {
   private readonly instance: Application = express();
@@ -56,20 +56,11 @@ export class App implements IApp {
       controllerService.handlers.forEach((handler: IHandler) => {
         if (!handler.method || !handler.path) return;
 
-        const originalHandler = controllerInstance[String(handler.name)];
         const middlewares: Middleware[] = handler.middlewares || [];
 
-        const finalHandler = async function (req: Request, res: Response, next: NextFunction) {
-          try {
-            originalHandler.call(controllerInstance, req, res, next);
-          } catch (error) {
-            if (!handler.errorHandler) {
-              next(error);
-            } else {
-              handler.errorHandler(error as Error, req, res, next);
-            }
-          }
-        };
+        const finalHandler: Handler = new HandlerService()
+          .parseConfiguration(handler)
+          .buildHandler(controllerInstance);
 
         router[handler.method](handler.path, ...middlewares, finalHandler);
 
