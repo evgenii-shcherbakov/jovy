@@ -14,13 +14,7 @@ jobs:
           node-version: '16.x'
       - name: Install modules
         run: npm install
-      - name: Setup git username
-        run: git config user.name ${{ secrets.GIT_USERNAME }}
-      - name: Setup git email
-        run: git config user.email ${{ secrets.GIT_EMAIL }}
       - name: Format code
         run: npm run format
       - name: Build
         run: npm run build
-      - name: Update repo
-        run: git push
