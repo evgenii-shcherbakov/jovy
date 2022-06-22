@@ -1,6 +1,6 @@
 {
   "name": "jovy",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Jovy framework (modified by Evgenii Shcherbakov express version)",
   "main": "./dist/index.js",
   "scripts": {
