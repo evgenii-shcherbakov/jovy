@@ -1,0 +1,6 @@
+{
+  "ignore": [".idea", ".git", "node_modules", "dist"],
+  "watch": ["src", "test"],
+  "exec": "ts-node test/main.ts",
+  "ext": "ts"
+}

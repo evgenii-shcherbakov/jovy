@@ -1,17 +1,19 @@
-import { HttpMethod } from '../constants/enums';
+import { HandlerType, HttpMethod } from '../constants/enums';
 import { Application, Handler } from 'express';
-import { ErrorHandler, HandlerInfo, LaunchCallback, Middleware } from './types';
+import { ErrorHandler, HandlerInfo, LaunchCallback, Middleware, ParameterInfo } from './types';
 
 export interface IHandler {
+  name: string;
   method?: HttpMethod;
   path?: string;
-  name?: string | symbol;
+  type?: HandlerType;
   middlewares?: Middleware[];
   errorHandler?: ErrorHandler;
+  params?: ParameterInfo[];
 }
 
 export interface IController {
-  [handleName: string]: Handler;
+  [handlerName: string]: Handler | Function;
 }
 
 export interface IApp {
@@ -29,4 +31,9 @@ export interface IControllerService {
 
 export interface IPathService {
   format(): string;
+}
+
+export interface IHandlerService {
+  parseConfiguration(params: IHandler): IHandlerService;
+  buildHandler(controller: IController): Handler;
 }

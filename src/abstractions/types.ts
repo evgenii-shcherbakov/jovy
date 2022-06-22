@@ -1,9 +1,16 @@
 import { Application, NextFunction, Request, Response } from 'express';
 import { ControllerClass } from './factories';
+import { ParameterType } from '../constants/enums';
 
 export type HandlerInfo = {
   endpoint: string;
   handler: string;
+};
+
+export type ParameterInfo = {
+  index: number;
+  type: ParameterType;
+  value: string;
 };
 
 export type ConfigureAppFunc = (app: Application) => void;
