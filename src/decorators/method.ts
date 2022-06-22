@@ -10,8 +10,12 @@ const handlerDecoratorFactory = (updatedProps: Partial<IHandler> = {}): MethodDe
 };
 
 const methodDecoratorFactory = (method: HttpMethod) => {
-  return (path: string = ''): MethodDecorator => {
-    return handlerDecoratorFactory({ method, path: new PathService(path).format() });
+  return (path: string = '', handlerType: HandlerType = HandlerType.REST): MethodDecorator => {
+    return handlerDecoratorFactory({
+      method,
+      path: new PathService(path).format(),
+      type: handlerType,
+    });
   };
 };
 
@@ -23,12 +27,4 @@ export const Delete = methodDecoratorFactory(HttpMethod.DELETE);
 
 export const CustomError = (errorHandler: ErrorHandler): MethodDecorator => {
   return handlerDecoratorFactory({ errorHandler });
-};
-
-export const Render = (): MethodDecorator => {
-  return handlerDecoratorFactory({ type: HandlerType.RENDER });
-};
-
-export const Classic = (): MethodDecorator => {
-  return handlerDecoratorFactory({ type: HandlerType.CLASSIC });
 };

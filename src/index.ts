@@ -8,7 +8,7 @@ export {
   LaunchCallback,
 } from './abstractions/types';
 export { ControllerClass } from './abstractions/factories';
-export { HttpMethod } from './constants/enums';
+export { HttpMethod, HandlerType } from './constants/enums';
 export { App } from './app';
 export { setMiddlewares } from './shared/exports';
 export {
@@ -20,8 +20,6 @@ export {
   Post,
   Put,
   Param,
-  Classic,
-  Render,
   Header,
   Query,
   Body,
@@ -29,4 +27,4 @@ export {
   Res,
   Next,
 } from './decorators';
-export type { Application, Request, Response, NextFunction } from 'express';
+export type { Application, Request, Response, NextFunction, Handler } from 'express';

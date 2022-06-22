@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '../../src';
+import { Controller, Get, Param, HandlerType } from '../../src';
 
 @Controller()
 export class MainController {
@@ -7,8 +7,13 @@ export class MainController {
     return 'Hello';
   }
 
-  @Get(':id/posts/:postId')
+  @Get(':id/posts/:postId', HandlerType.RENDER)
   getId(@Param('id') id: string, @Param('postId') postId: string): string {
-    return `${id} | ${postId}`;
+    return `
+      <div>
+        <h2>Id: ${id}</h2>
+        <p>PostId: ${postId}</p>
+      </div>
+    `;
   }
 }
