@@ -31,5 +31,11 @@ jobs:
         run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
-      - name: Update repo
+      - name: Update main branch
+        run: git push
+      - name: Checkout to dev branch
+        run: git checkout dev
+      - name: Merge main branch into dev
+        run: git merge main
+      - name: Update dev branch
         run: git push
