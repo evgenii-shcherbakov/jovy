@@ -47,3 +47,7 @@ export const Res = (): ParameterDecorator => {
 export const Next = (): ParameterDecorator => {
   return parameterDecoratorFactory({ type: ParameterType.NEXT, value: '' });
 };
+
+export const File = (name = ''): ParameterDecorator => {
+  return parameterDecoratorFactory({ type: ParameterType.FILE, value: name });
+};

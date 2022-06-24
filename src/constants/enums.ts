@@ -19,6 +19,7 @@ export enum ParameterType {
   QUERY = 'query',
   HEADER = 'header',
   BODY = 'body',
+  FILE = 'file',
 }
 
 export enum HandlerType {

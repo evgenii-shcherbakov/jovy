@@ -1,4 +1,4 @@
-import { Controller, Get, Param, HandlerType } from '../../src';
+import { Controller, Get, Post, Param, HandlerType, File, UploadedFile } from '../../src';
 
 @Controller()
 export class MainController {
@@ -15,5 +15,15 @@ export class MainController {
         <p>PostId: ${postId}</p>
       </div>
     `;
+  }
+
+  @Post('upload')
+  upload(@File('file') file?: UploadedFile) {
+    if (!file) throw new Error();
+
+    return {
+      name: file.name,
+      size: file.size,
+    };
   }
 }

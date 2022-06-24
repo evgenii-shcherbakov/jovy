@@ -26,5 +26,7 @@ export {
   Req,
   Res,
   Next,
+  File,
 } from './decorators';
 export type { Application, Request, Response, NextFunction, Handler } from 'express';
+export type { UploadedFile, FileArray } from 'express-fileupload';

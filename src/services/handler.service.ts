@@ -68,6 +68,8 @@ export class HandlerService implements IHandlerService {
             return res;
           case ParameterType.NEXT:
             return next;
+          case ParameterType.FILE:
+            return req.files?.[value];
           default:
             return;
         }
