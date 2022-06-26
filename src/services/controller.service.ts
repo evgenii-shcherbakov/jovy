@@ -10,8 +10,6 @@ export class ControllerService implements IControllerService {
   }
 
   get basePath(): string {
-    console.log(Reflect.getMetadata(MetadataKey.BASE_PATH, this.controllerClass));
-
     if (!Reflect.hasMetadata(MetadataKey.BASE_PATH, this.controllerClass)) {
       throw new Error(`Controller ${this.controllerClass.name} without basePath!`);
     }
