@@ -2,6 +2,10 @@ import { HandlerType, HttpMethod } from '../constants/enums';
 import { Application, Handler } from 'express';
 import { ErrorHandler, HandlerInfo, LaunchCallback, Middleware, ParameterInfo } from './types';
 
+export interface IStorage {
+  [property: string]: any;
+}
+
 export interface IHandler {
   name: string;
   method?: HttpMethod;

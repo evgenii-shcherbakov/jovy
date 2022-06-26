@@ -1,4 +1,4 @@
-export { IApp, IController } from './abstractions/interfaces';
+export { IApp, IController, IStorage } from './abstractions/interfaces';
 export {
   Middleware,
   HandlerInfo,
@@ -10,7 +10,7 @@ export {
 export { ControllerClass } from './abstractions/factories';
 export { HttpMethod, HandlerType } from './constants/enums';
 export { App } from './app';
-export { setMiddlewares } from './shared/exports';
+export { setMiddlewares, saveToStorage } from './shared/exports';
 export {
   Controller,
   CustomError,
@@ -31,6 +31,7 @@ export {
   SignedCookies,
   Ip,
   HostName,
+  Storage,
 } from './decorators';
 export type { Application, Request, Response, NextFunction, Handler } from 'express';
 export type { UploadedFile, FileArray } from 'express-fileupload';

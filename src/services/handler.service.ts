@@ -1,6 +1,6 @@
 import { IController, IHandler, IHandlerService } from '../abstractions/interfaces';
 import { Handler, NextFunction, Request, Response } from 'express';
-import { ErrorHandler, ParameterInfo } from '../abstractions/types';
+import { ErrorHandler, ParameterInfo, StorableRequest } from '../abstractions/types';
 import { HandlerType, ParameterType } from '../constants/enums';
 
 export class HandlerService implements IHandlerService {
@@ -14,7 +14,7 @@ export class HandlerService implements IHandlerService {
 
     return async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const args: any[] = this.getHandlerArgs(req, res, next);
+        const args: any[] = this.getHandlerArgs(req as StorableRequest, res, next);
 
         switch (this.handlerType) {
           case HandlerType.CLASSIC:
@@ -37,7 +37,7 @@ export class HandlerService implements IHandlerService {
     };
   }
 
-  private getHandlerArgs(req: Request, res: Response, next: NextFunction): any[] {
+  private getHandlerArgs(req: StorableRequest, res: Response, next: NextFunction): any[] {
     return this.handlerParams
       .sort((prev: ParameterInfo, next: ParameterInfo) => prev.index - next.index)
       .map(({ type, value }) => {
@@ -78,6 +78,8 @@ export class HandlerService implements IHandlerService {
             return req.ip;
           case ParameterType.HOST_NAME:
             return req.hostname;
+          case ParameterType.STORAGE:
+            return value ? req.storage?.[value] : req.storage;
           default:
             return;
         }

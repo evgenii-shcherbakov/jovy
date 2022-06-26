@@ -120,7 +120,7 @@ export class App implements IApp {
       await launchCallback(this.instance, this.port);
     } catch (error) {
       console.error(`Server error: ${error}`);
-      process.exit();
+      process.exit(1);
     }
   }
 }

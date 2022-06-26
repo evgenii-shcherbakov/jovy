@@ -108,3 +108,11 @@ export const Ip = (): ParameterDecorator => {
 export const HostName = (): ParameterDecorator => {
   return parameterDecoratorFactory({ type: ParameterType.HOST_NAME, value: '' });
 };
+
+/**
+ * @description Request storage property decorator
+ * @param key {string?} Request storage key, if missing - returns 'req.storage' object
+ */
+export const Storage = (key = ''): ParameterDecorator => {
+  return parameterDecoratorFactory({ type: ParameterType.STORAGE, value: key });
+};

@@ -13,4 +13,5 @@ export {
   SignedCookies,
   Ip,
   HostName,
+  Storage,
 } from './parameter';
