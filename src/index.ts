@@ -35,3 +35,4 @@ export {
 } from './decorators';
 export type { Application, Request, Response, NextFunction, Handler } from 'express';
 export type { UploadedFile, FileArray } from 'express-fileupload';
+export { config, parse, DotenvConfigOptions, DotenvConfigOutput, DotenvParseOutput } from 'dotenv';
