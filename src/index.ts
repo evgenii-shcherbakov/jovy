@@ -27,6 +27,10 @@ export {
   Res,
   Next,
   File,
+  Cookies,
+  SignedCookies,
+  Ip,
+  HostName,
 } from './decorators';
 export type { Application, Request, Response, NextFunction, Handler } from 'express';
 export type { UploadedFile, FileArray } from 'express-fileupload';

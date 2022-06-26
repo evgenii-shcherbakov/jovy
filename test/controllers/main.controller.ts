@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Param, HandlerType, File, UploadedFile } from '../../src';
+import { Controller, Get, Post, Param, HandlerType, File, UploadedFile, Ip } from '../../src';
 
 @Controller()
 export class MainController {
   @Get()
   getHello(): string {
     return 'Hello';
+  }
+
+  @Get('ip')
+  getIp(@Ip() ip: string): string {
+    return ip;
   }
 
   @Get(':id/posts/:postId', HandlerType.RENDER)

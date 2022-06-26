@@ -17,7 +17,7 @@ import { ControllerService, HandlerService, PathService } from './services';
 export class App implements IApp {
   private readonly instance: Application = express();
   private readonly handlerInfo: HandlerInfo[] = [];
-  private readonly middlewares: any[] = [cors(), fileUpload()];
+  private readonly middlewares: any[] = [fileUpload()];
 
   private port: number | string = 5000;
   private errorHandler: ErrorHandler = defaultErrorHandler;
@@ -29,6 +29,7 @@ export class App implements IApp {
   private parseConfig(config: AppConfiguration): void {
     const {
       port,
+      disableCors,
       routesInfo,
       controllers,
       middlewares: customMiddlewares,
@@ -38,6 +39,10 @@ export class App implements IApp {
 
     if (port) {
       this.port = port;
+    }
+
+    if (!disableCors) {
+      this.middlewares.push(cors());
     }
 
     this.middlewares
@@ -92,14 +97,24 @@ export class App implements IApp {
     }
   }
 
+  /**
+   * @description Get express instance
+   */
   getInstance(): Application {
     return this.instance;
   }
 
+  /**
+   * @description Get mapped handlers info
+   */
   getHandlerInfo(): HandlerInfo[] {
     return this.handlerInfo;
   }
 
+  /**
+   * @description App start function
+   * @param launchCallback {LaunchCallback?} Callback, which will execute on startup
+   */
   async launch(launchCallback: LaunchCallback = defaultLaunchCallback): Promise<void> {
     try {
       await launchCallback(this.instance, this.port);

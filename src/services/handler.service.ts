@@ -43,11 +43,11 @@ export class HandlerService implements IHandlerService {
       .map(({ type, value }) => {
         switch (type) {
           case ParameterType.PARAM:
-            return req.params[value];
+            return value ? req.params[value] : req.params;
           case ParameterType.QUERY:
-            return req.query[value];
+            return value ? req.query[value] : req.query;
           case ParameterType.HEADER:
-            return req.header(value);
+            return value ? req.header(value) : req.headers;
           case ParameterType.BODY:
             const fields: string[] = value.split('|');
 
@@ -69,7 +69,15 @@ export class HandlerService implements IHandlerService {
           case ParameterType.NEXT:
             return next;
           case ParameterType.FILE:
-            return req.files?.[value];
+            return value ? req.files?.[value] : req.files;
+          case ParameterType.COOKIES:
+            return req.cookies;
+          case ParameterType.SIGNED_COOKIES:
+            return req.signedCookies;
+          case ParameterType.IP:
+            return req.ip;
+          case ParameterType.HOST_NAME:
+            return req.hostname;
           default:
             return;
         }
