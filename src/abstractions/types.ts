@@ -8,6 +8,7 @@ export type StorableRequest = Request & {
 };
 
 export type HandlerInfo = {
+  method: string;
   endpoint: string;
   handler: string;
 };
