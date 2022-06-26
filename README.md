@@ -197,6 +197,7 @@ type ErrorHandler = (
 
 type AppConfiguration = {
   port?: number | string; // used by server port
+  disableCors?: boolean; // add true, if need disable cors
   routesInfo?: boolean; // set false, if no need show in console routes table
   controllers?: ControllerClass[]; // controlller classes arr
   middlewares?: any[]; // express middlewares (global)

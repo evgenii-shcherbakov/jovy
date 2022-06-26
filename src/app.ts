@@ -1,4 +1,6 @@
 import express, { Application, Handler, Router } from 'express';
+import fileUpload from 'express-fileupload';
+import cors from 'cors';
 import { join } from 'path';
 import { IApp, IController, IControllerService, IHandler } from './abstractions/interfaces';
 import {
@@ -15,6 +17,7 @@ import { ControllerService, HandlerService, PathService } from './services';
 export class App implements IApp {
   private readonly instance: Application = express();
   private readonly handlerInfo: HandlerInfo[] = [];
+  private readonly middlewares: any[] = [fileUpload()];
 
   private port: number | string = 5000;
   private errorHandler: ErrorHandler = defaultErrorHandler;
@@ -24,13 +27,27 @@ export class App implements IApp {
   }
 
   private parseConfig(config: AppConfiguration): void {
-    const { port, routesInfo, controllers, middlewares, configure, errorHandler } = config;
+    const {
+      port,
+      disableCors,
+      routesInfo,
+      controllers,
+      middlewares: customMiddlewares,
+      configure,
+      errorHandler,
+    } = config;
 
     if (port) {
       this.port = port;
     }
 
-    (middlewares || []).forEach((middleware) => this.instance.use(middleware));
+    if (!disableCors) {
+      this.middlewares.push(cors());
+    }
+
+    this.middlewares
+      .concat(customMiddlewares || [])
+      .forEach((middleware) => this.instance.use(middleware));
 
     if (configure) {
       configure(this.instance);
@@ -80,14 +97,24 @@ export class App implements IApp {
     }
   }
 
+  /**
+   * @description Get express instance
+   */
   getInstance(): Application {
     return this.instance;
   }
 
+  /**
+   * @description Get mapped handlers info
+   */
   getHandlerInfo(): HandlerInfo[] {
     return this.handlerInfo;
   }
 
+  /**
+   * @description App start function
+   * @param launchCallback {LaunchCallback?} Callback, which will execute on startup
+   */
   async launch(launchCallback: LaunchCallback = defaultLaunchCallback): Promise<void> {
     try {
       await launchCallback(this.instance, this.port);

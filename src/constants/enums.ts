@@ -3,6 +3,9 @@ export enum MetadataKey {
   HANDLERS = 'handlers',
 }
 
+/**
+ * @description HTTP methods enum
+ */
 export enum HttpMethod {
   GET = 'get',
   POST = 'post',
@@ -19,8 +22,16 @@ export enum ParameterType {
   QUERY = 'query',
   HEADER = 'header',
   BODY = 'body',
+  FILE = 'file',
+  COOKIES = 'cookies',
+  SIGNED_COOKIES = 'signed-cookies',
+  IP = 'ip',
+  HOST_NAME = 'host-name',
 }
 
+/**
+ * @description Request handler type enum
+ */
 export enum HandlerType {
   REST = 'rest',
   RENDER = 'render',

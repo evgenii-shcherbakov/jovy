@@ -28,6 +28,7 @@ export type Middleware = (req: Request, res: Response, next: NextFunction) => Pr
 
 export type AppConfiguration = {
   port?: number | string;
+  disableCors?: boolean;
   routesInfo?: boolean;
   controllers?: ControllerClass[];
   middlewares?: any[];
