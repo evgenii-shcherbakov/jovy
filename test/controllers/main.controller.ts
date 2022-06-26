@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Param, HandlerType, File, UploadedFile, Ip } from '../../src';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  HandlerType,
+  File,
+  UploadedFile,
+  Ip,
+  Storage,
+} from '../../src';
+import { SavedMessage } from '../decorators';
 
 @Controller()
 export class MainController {
@@ -10,6 +21,12 @@ export class MainController {
   @Get('ip')
   getIp(@Ip() ip: string): string {
     return ip;
+  }
+
+  @Get('middlewares')
+  @SavedMessage()
+  getMiddlewares(@Storage('message') message?: string): string {
+    return message || `Can't get message from middleware`;
   }
 
   @Get(':id/posts/:postId', HandlerType.RENDER)

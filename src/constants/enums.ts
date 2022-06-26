@@ -27,6 +27,7 @@ export enum ParameterType {
   SIGNED_COOKIES = 'signed-cookies',
   IP = 'ip',
   HOST_NAME = 'host-name',
+  STORAGE = 'storage',
 }
 
 /**

@@ -84,7 +84,8 @@ export class App implements IApp {
         const path: string = new PathService(join(basePath, handler.path)).format();
 
         this.handlerInfo.push({
-          endpoint: `${handler.method.toLocaleUpperCase()} ${path || '/'}`,
+          method: handler.method.toLocaleUpperCase(),
+          endpoint: path || '/',
           handler: `${controllerInstance.toString()}.${String(handler.name)}`,
         });
       });
@@ -93,6 +94,7 @@ export class App implements IApp {
     });
 
     if (isShowInfo) {
+      console.log('App routing table:');
       console.table(this.handlerInfo);
     }
   }
@@ -120,7 +122,7 @@ export class App implements IApp {
       await launchCallback(this.instance, this.port);
     } catch (error) {
       console.error(`Server error: ${error}`);
-      process.exit();
+      process.exit(1);
     }
   }
 }

@@ -1,8 +1,14 @@
 import { Application, NextFunction, Request, Response } from 'express';
 import { ControllerClass } from './factories';
 import { ParameterType } from '../constants/enums';
+import { IStorage } from './interfaces';
+
+export type StorableRequest = Request & {
+  storage?: IStorage;
+};
 
 export type HandlerInfo = {
+  method: string;
   endpoint: string;
   handler: string;
 };
