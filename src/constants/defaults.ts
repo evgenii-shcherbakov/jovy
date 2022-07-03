@@ -6,7 +6,8 @@ export const defaultErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(500).json({ message: 'unknown error' });
+  console.error('---Error---\n', err, '\n---Error---');
+  res.status(500).json({ message: err.message || 'unknown error' });
 };
 
 export const defaultLaunchCallback = (app: Application, port: number | string) => {

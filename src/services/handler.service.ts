@@ -51,7 +51,7 @@ export class HandlerService implements IHandlerService {
           case ParameterType.BODY:
             const fields: string[] = value.split('|');
 
-            if (!fields.length) {
+            if (value === '' || !fields.length) {
               return req.body;
             }
 
