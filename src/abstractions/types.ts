@@ -32,6 +32,12 @@ export type LaunchCallback = (app: Application, port: string | number) => Promis
 
 export type Middleware = (req: Request, res: Response, next: NextFunction) => Promise<void> | void;
 
+export type ServeStaticOptions = {
+  disable?: boolean;
+  root?: string;
+  options?: any;
+};
+
 export type AppConfiguration = {
   port?: number | string;
   disableCors?: boolean;
@@ -40,4 +46,5 @@ export type AppConfiguration = {
   middlewares?: any[];
   configure?: ConfigureAppFunc;
   errorHandler?: ErrorHandler;
+  serveStatic?: ServeStaticOptions;
 };

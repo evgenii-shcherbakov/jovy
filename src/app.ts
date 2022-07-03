@@ -1,4 +1,4 @@
-import express, { Application, Handler, Router } from 'express';
+import express, { Application, Handler, Router, json, static as staticMiddleware } from 'express';
 import fileUpload from 'express-fileupload';
 import cors from 'cors';
 import { join } from 'path';
@@ -17,7 +17,7 @@ import { ControllerService, HandlerService, PathService } from './services';
 export class App implements IApp {
   private readonly instance: Application = express();
   private readonly handlerInfo: HandlerInfo[] = [];
-  private readonly middlewares: any[] = [fileUpload()];
+  private readonly middlewares: any[] = [json(), fileUpload()];
 
   private port: number | string = 5000;
   private errorHandler: ErrorHandler = defaultErrorHandler;
@@ -35,6 +35,7 @@ export class App implements IApp {
       middlewares: customMiddlewares,
       configure,
       errorHandler,
+      serveStatic,
     } = config;
 
     if (port) {
@@ -43,6 +44,12 @@ export class App implements IApp {
 
     if (!disableCors) {
       this.middlewares.push(cors());
+    }
+
+    if (!serveStatic?.disable) {
+      const staticPath: string = serveStatic?.root || 'static';
+      this.instance.use(staticMiddleware(join(process.cwd(), staticPath), serveStatic?.options));
+      console.info(`Static files are served from '${staticPath}' folder`);
     }
 
     this.middlewares
@@ -79,7 +86,7 @@ export class App implements IApp {
           .parseConfiguration(handler)
           .buildHandler(controllerInstance);
 
-        router[handler.method](handler.path, ...middlewares, finalHandler);
+        router[handler.method](handler.path, ...middlewares, finalHandler.bind(controllerInstance));
 
         const path: string = new PathService(join(basePath, handler.path)).format();
 
