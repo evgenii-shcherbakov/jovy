@@ -6,9 +6,10 @@ export {
   ConfigureAppFunc,
   AppConfiguration,
   LaunchCallback,
+  ServeStaticOptions,
 } from './abstractions/types';
 export { ControllerClass } from './abstractions/factories';
-export { HttpMethod, HandlerType } from './constants/enums';
+export { HandlerType } from './constants/enums';
 export { App } from './app';
 export { setMiddlewares, saveToStorage } from './shared/exports';
 export {

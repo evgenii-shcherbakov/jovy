@@ -1,13 +1,17 @@
 import {
+  Body,
   Controller,
-  Get,
-  Post,
-  Param,
-  HandlerType,
   File,
-  UploadedFile,
+  Get,
+  HandlerType,
   Ip,
+  Param,
+  Post,
+  Req,
+  Request,
   Storage,
+  UploadedFile,
+  Response,
 } from '../../src';
 import { SavedMessage } from '../decorators';
 
@@ -21,6 +25,16 @@ export class MainController {
   @Get('ip')
   getIp(@Ip() ip: string): string {
     return ip;
+  }
+
+  @Post('body')
+  setBody(@Body() dto: any, @Req() req: Request): any {
+    return dto || 'empty body';
+  }
+
+  @Post('lol', HandlerType.CLASSIC)
+  setLol(req: Request, res: Response): any {
+    res.json(req.body);
   }
 
   @Get('middlewares')

@@ -3,9 +3,6 @@ export enum MetadataKey {
   HANDLERS = 'handlers',
 }
 
-/**
- * @description HTTP methods enum
- */
 export enum HttpMethod {
   GET = 'get',
   POST = 'post',
