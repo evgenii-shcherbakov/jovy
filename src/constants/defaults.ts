@@ -6,7 +6,7 @@ export const defaultErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  console.error('Error: ', err);
+  console.error('---Error---\n', err, '\n---Error---');
   res.status(500).json({ message: err.message || 'unknown error' });
 };
 
