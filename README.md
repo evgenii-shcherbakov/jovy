@@ -1,6 +1,9 @@
-*jovy*
-# Jovy framework
-Main express modification with decorators support
+# jovy
+Express-based declarative server framework inspired by Nest
+
+[![npm version](https://img.shields.io/npm/v/jovy.svg)](https://npmjs.org/package/jovy)
+[![npm license](https://img.shields.io/npm/l/jovy.svg)](https://npmjs.org/package/jovy)
+[![npm type definitions](https://img.shields.io/npm/types/jovy)](https://npmjs.org/package/jovy)
 
 ```typescript
 import { Controller, Get, Param, HandlerType } from 'jovy';
@@ -31,7 +34,7 @@ const config: AppConfiguration = {
 new App(config).launch();
 ```
 
-## Installation
+### Installation
 
 This is a [Node.js](https://nodejs.org/en/) module available through the
 [npm registry](https://www.npmjs.com/).
@@ -46,7 +49,7 @@ Installation is done using the
 [`npm install` command](https://docs.npmjs.com/getting-started/installing-npm-packages-locally):
 
 ```shell
-npm install jovy
+npm install jovy reflect-metadata
 ```
 
 If needed, you can also add express deps:
@@ -56,21 +59,22 @@ npm install express
 npm install -D @types/express
 ```
 
-# Documentation
+Add string below in the top of main app file (main.ts, for example)
 
-## Middlewares
+```typescript
+import 'reflect-metadata';
+```
+
+Add flags `"experimentalDecorators": true` and `"emitDecoratorMetadata": true` in `tsconfig.json` file
+
+### Documentation
+
+##### Middlewares
+
 Example of using middlewares:
 
 ```typescript
-import {
-  setMiddlewares,
-  Middleware,
-  Controller,
-  Get,
-  Request, 
-  Response, 
-  NextFunction,
-} from 'jovy';
+import { setMiddlewares, Middleware, Controller, Get, Request, Response, NextFunction } from 'jovy';
 
 // create you middleware, like in express
 export const authMiddleware: Middleware = async (
@@ -95,7 +99,8 @@ export default class MiddlewareController {
 }
 ```
 
-## Errors
+##### Errors
+
 Example of using error handling:
 
 ```typescript
@@ -106,8 +111,8 @@ import {
   CustomError,
   ErrorHandler,
   Get,
-  NextFunction, 
-  Request, 
+  NextFunction,
+  Request,
   Response,
 } from 'jovy';
 
@@ -154,7 +159,8 @@ const config: AppConfiguration = {
 new App(config).launch();
 ```
 
-## Launch
+##### Launch
+
 Examples of launch callback customizations:
 
 ```typescript
@@ -170,12 +176,13 @@ new App().launch(async (app: Application, port: string | number) => {
   const delayedPort: string | number = await new Promise((res) =>
     setTimeout(() => res(port), 1000)
   );
-  
+
   app.listen(port, () => console.log(delayedPort));
 });
 ```
 
-## Configuration
+##### Configuration
+
 About app config object:
 
 ```typescript

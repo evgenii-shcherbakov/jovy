@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "lib": ["es2021", "es6"],
+    "target": "ESNext",
+    "module": "CommonJS",
+    "lib": ["ESNext", "ES2021", "ES6"],
     "moduleResolution": "Node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
