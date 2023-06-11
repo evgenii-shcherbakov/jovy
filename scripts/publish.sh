@@ -10,7 +10,7 @@ setup_git() {
   git config pull.rebase true
 }
 
-update_npm() {
+setup_npm() {
   echo "Update npm..."
   npm install npm@latest -g || exit 1
 }
@@ -26,8 +26,9 @@ update_version() {
       echo "Parameter 'version' in $FILE already updated, skip auto-patching..."
     else
       npm version patch
-      npm ci
   fi
+
+  npm ci
 }
 
 publish() {
@@ -38,7 +39,7 @@ publish() {
     curl \
       -X "GET" \
       -H "Authorization: Bearer $KEYSTORE_ACCESS_TOKEN" \
-      --url "$KEYSTORE_HOST/applications/jovy/publishing/npm"
+      --url "$KEYSTORE_HOST/applications/jovy/publishing/npm/access-token"
   )
 
   echo "Publish..."
@@ -55,7 +56,7 @@ update_git_branch() {
 
 main() {
   setup_git
-  update_npm
+  setup_npm
   update_version
   publish
   update_git_branch
