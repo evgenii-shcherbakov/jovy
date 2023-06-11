@@ -1,6 +1,6 @@
 {
   "name": "jovy",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Express-based declarative server framework inspired by Nest",
   "repository": {
     "type": "git",
