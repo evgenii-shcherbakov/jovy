@@ -29,6 +29,8 @@ update_version() {
     else
       git stash
       npm version patch
+      git push
+      git stash pop
   fi
 
   npm ci
@@ -49,20 +51,11 @@ publish() {
   NODE_AUTH_TOKEN="$NPM_AUTH_TOKEN" npm publish --access public --provenance || exit 1
 }
 
-update_git_branch() {
-  echo 'Update main branch...'
-  git add .
-  git commit -m "Update version"
-  git pull origin main
-  git push origin main
-}
-
 main() {
   setup_git
   setup_npm
   update_version
   publish
-  update_git_branch
 }
 
 main
