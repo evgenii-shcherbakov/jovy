@@ -21,10 +21,13 @@ update_version() {
 
   echo "Patch version..."
 
+  git status
+
   if git diff HEAD~ HEAD --unified=0 -- "$FILE" | grep -q "+.*$SEARCH_PATTERN.*"
     then
       echo "Parameter 'version' in $FILE already updated, skip auto-patching..."
     else
+      git stash
       npm version patch
   fi
 
